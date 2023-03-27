@@ -230,8 +230,7 @@ def predict(champ1,champ2,champ3,champ4,champ5,champ6,champ7,champ8,champ9,hotst
 
 
 st.title('LoL Champion Recommender')
-st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/6ac9b3b3-6f51-4b60-8f8e-5b199d476a0f/d6yqvmu-5d594ce1-02d7-4e14-af93-5649fbc89a84.jpg/v1/f
-st.header('Enter the characteristics of the diamond:')
+st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/6ac9b3b3-6f51-4b60-8f8e-5b199d476a0f/d6yqvmu-5d594ce1-02d7-4e14-af93-5649fbc89a84.jpg/v1/fill/w_1024,h_576,q_75,strp/yasuo_wallpaper_by_wacalac_d6yqvmu-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzZhYzliM2IzLTZmNTEtNGI2MC04ZjhlLTViMTk5ZDQ3NmEwZlwvZDZ5cXZtdS01ZDU5NGNlMS0wMmQ3LTRlMTQtYWY5My01NjQ5ZmJjODlhODQuanBnIiwiaGVpZ2h0IjoiPD01NzYiLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.X9wyOQ5QYjK8G1Wkx2xK0Pdsevlm7nl3hoWn9vqYtDs")
 st.text_input("Enter your Name: ", key="name")
 st.header('Enter the champions that your other four teamates have chosen: ')
 
