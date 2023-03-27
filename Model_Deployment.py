@@ -239,27 +239,15 @@ st.header('Enter the champions that your teammates have selected: ')
 
 champion_selections = {}
 
-champion_options = np.unique(champion_encoded['id'])
-num_columns = 3  # Adjust this value to change the number of columns
-rows = len(champion_options) // num_columns + (1 if len(champion_options) % num_columns != 0 else 0)
-
 for i in range(1, 10):
     st.subheader(f"Please select champion {i}")
-    columns = st.columns(num_columns)
-    selected_champion = None
-    for row in range(rows):
-        with columns[row]:
-            start_index = row * num_columns
-            end_index = min((row + 1) * num_columns, len(champion_options))
-            current_selection = st.radio(
-                'Champion Name:',
-                champion_options[start_index:end_index],
-                key=f'champion_{i}_row_{row}'  # Adding a unique suffix based on the row
-            )
-            if current_selection:
-                selected_champion = current_selection
-    champion_selections[f'champion_{i}'] = selected_champion
-
+    left_column, right_column = st.columns(2)
+    with left_column:
+        champion_selections[f'champion_{i}'] = st.radio(
+            'Champion Name:',
+            np.unique(champion_encoded['id']),
+            key=f'champion_{i}'
+        )
 
 team_positions = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY']
 
