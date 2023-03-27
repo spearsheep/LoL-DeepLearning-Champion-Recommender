@@ -232,7 +232,7 @@ def predict(champ1,champ2,champ3,champ4,champ5,champ6,champ7,champ8,champ9,hotst
 
 
 st.title('LoL Champion Recommender Prototype')
-st.image(image, caption='Your Image Caption', use_column_width=True)
+st.image(image, caption='Death is like the wind - always by my side', use_column_width=True)
 st.text_input("Enter your Name: ", key="name")
 st.header('Enter the champions that your teammates have selected: ')
 
