@@ -246,15 +246,20 @@ rows = len(champion_options) // num_columns + (1 if len(champion_options) % num_
 for i in range(1, 10):
     st.subheader(f"Please select champion {i}")
     columns = st.columns(num_columns)
+    selected_champion = None
     for row in range(rows):
         with columns[row]:
             start_index = row * num_columns
             end_index = min((row + 1) * num_columns, len(champion_options))
-            champion_selections[f'champion_{i}'] = st.radio(
+            current_selection = st.radio(
                 'Champion Name:',
                 champion_options[start_index:end_index],
-                key=f'champion_{i}'
+                key=f'champion_{i}_row_{row}'  # Adding a unique suffix based on the row
             )
+            if current_selection:
+                selected_champion = current_selection
+    champion_selections[f'champion_{i}'] = selected_champion
+
 
 team_positions = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY']
 
