@@ -238,6 +238,16 @@ st.header('Enter the champions that your teammates have selected: ')
 
 champion_selections = {}
 
+for i in range(1, 10): 
+    # Define a list of options for the drop-down menu
+    options = ['Option 1', 'Option 2', 'Option 3']
+
+    # Display the drop-down menu
+    selected_option = st.selectbox('Select an option:', options)
+
+    # Show the selected option
+    st.write('You selected:', selected_option)
+
 for i in range(1, 10):
     st.subheader(f"Please select champion {i}")
     left_column, right_column = st.columns(2)
