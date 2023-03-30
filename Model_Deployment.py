@@ -249,7 +249,7 @@ for i in range(1, 10):
     st.write('You selected:', selected_option)
 
 for i in range(1, 10):
-    st.subheader(f"Please select champion {i}")
+    st.subheader(f"PLEASE select champion {i}")
     left_column, right_column = st.columns(2)
     with left_column:
         champion_selections[f'champion_{i}'] = st.radio(
