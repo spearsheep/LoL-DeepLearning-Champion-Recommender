@@ -318,6 +318,8 @@ if st.button('Recommend top 10 Champions for your game', key="button1"):
     prediction = predict(*champion_selections.values(), selected_hotstreak, selected_team_position, win_pct)
     st.write(prediction)
 
+st.markdown("""Leveraging deep learning, our model recommends champions based on interactions between opponent and teammate champions. To provide personalized options for you to explore and enjoy, we utilize the SVG algorithm, suggesting champions tailored to your preferences.""")
+
 st.header('Enter your top five most played champions and mastery points')
 
 most_played_champions = []
