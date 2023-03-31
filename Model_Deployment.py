@@ -12,6 +12,7 @@ import tensorflow as tf
 from tensorflow import keras
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.model_selection import train_test_split
+from surprise import Reader, Dataset, SVD
 import streamlit as st
 
 
@@ -228,53 +229,106 @@ def predict(champ1,champ2,champ3,champ4,champ5,champ6,champ7,champ8,champ9,hotst
     return(sorted_df.head(10))
 
 
+# collaborative filtering 
+
+
+recommend_df = pd.read_csv('playerCP.csv')
+
+most_played_champions = []
+most_played_CP = []
+
+CPscaler = MinMaxScaler(feature_range=(0.5, 5))
+
+def SVD_recommend(summoner_name, most_played_champions, most_played_CP, recommend_df): 
+    player_df = pd.DataFrame()
+    for i in range(5):
+        mastery_info =  {"playerId":[summoner_name], "championId": [name_to_key[most_played_champions[i]]], "championPoints": [most_played_CP[i]]}
+        player_df = pd.concat([player_df, pd.DataFrame(mastery_info)], axis=0)
+    player_df.championPoints = CPscaler.fit_transform(player_df.championPoints.values.reshape(-1, 1))
+    recommend_df = pd.concat([recommend_df, player_df], axis=0)
+
+    mean_CP = recommend_df.groupby('championId', as_index=False)['championPoints'].mean()
+    normalized_CP = pd.merge(recommend_df, mean_CP, on='championId')
+    normalized_CP['championPoints'] = normalized_CP['championPoints_x'] - normalized_CP['championPoints_y']
+
+    points_dict = {'playerId': list(normalized_CP.playerId), 
+                   'championId': list(normalized_CP.championId), 
+                   'championPoints': list(normalized_CP.championPoints)}
+
+    reader = Reader(rating_scale=(0.5, 5))
+
+    data = Dataset.load_from_df(normalized_CP[['playerId', 'championId', 'championPoints']], reader)
+
+    trainset = data.build_full_trainset()
+    svd = SVD() 
+    svd.fit(trainset) 
+    
+    recommended = {}
+    for key, champ in champ_dict.items(): 
+        #for key in df.championId.unique():
+        if (champ not in most_played_champions):  
+            pred = svd.predict(summoner_name, key, verbose=False)
+            recommended.update({champ_dict[pred.iid]: pred.est})
+    top_five = sorted(recommended.items(), key=lambda x:x[1], reverse=True)[0:5]
+    recommended_champs = [champ[0] for champ in top_five]
+    return recommended_champs
+
+
 # In[10]:
 
-
+# streamlit display 
 st.title('LoL Champion Recommender Prototype')
 st.image(image, caption='Death is like the wind - always by my side', use_column_width=True)
-st.text_input("Enter your Name: ", key="name")
+summoner_name = st.text_input("Enter your Name: ", key="name")
 st.header('Enter the champions that your teammates have selected: ')
 
 champion_selections = {}
-
-for i in range(1, 10): 
-    # Define a list of options for the drop-down menu
-    options = ['Option 1', 'Option 2', 'Option 3']
-
-    # Display the drop-down menu
-    selected_option = st.selectbox('Select an option:', options)
-
-    # Show the selected option
-    st.write('You selected:', selected_option)
-
-for i in range(1, 10):
-    st.subheader(f"PLEASE select champion {i}")
+for i in range(1, 5):
+    st.subheader(f"Please select champion {i}")
     left_column, right_column = st.columns(2)
     with left_column:
-        champion_selections[f'champion_{i}'] = st.radio(
-            'Champion Name:',
-            np.unique(champion_encoded['id']),
-            key=f'champion_{i}'
-        )
+        champion_selections[f'champion_{i}'] = st.selectbox('Select a champion:', np.unique(champion_encoded['id']), key=f'option_{i}')
+        
+st.header('Enter the champions that your opponents have selected: ')
+for i in range(5, 10):
+    st.subheader(f"Please select champion {i}")
+    left_column, right_column = st.columns(2)
+    with left_column:
+        champion_selections[f'champion_{i}'] = st.selectbox('Select a champion:', np.unique(champion_encoded['id']), key=f'option_{i}')
+        
+
 
 team_positions = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY']
 
-selected_team_position = st.select_slider("Select team position:", options=team_positions)
+selected_team_position = st.select_slider("Select team position:", options=team_positions, key="slider2")
 
 hotstreak_options = ['Yes', 'No']
-selected_hotstreak = st.selectbox("Is the player on a hot streak?", options=hotstreak_options)
+selected_hotstreak = st.selectbox("Is the player on a hot streak?", options=hotstreak_options, key="slider3")
 
-win_pct = st.slider("Win percentage (%)", min_value=0.0, max_value=100.0, step=0.1)
+win_pct = st.slider("Win percentage (%)", min_value=0.0, max_value=100.0, step=0.1, key="slider4")
 win_pct = win_pct/100
 
-if st.button('Recommend top 10 Champions for your game'):
+if st.button('Recommend top 10 Champions for your game', key="button1"):
     prediction = predict(*champion_selections.values(), selected_hotstreak, selected_team_position, win_pct)
     st.write(prediction)
+    
+    
+st.header('Enter your top five most played champions and mastery points') 
 
-
-# In[11]:
-
+most_played_champions = []
+most_played_CP = []
+for i in range(5): 
+    most_played_champions.append(st.selectbox('Select a champion:', np.unique(champion_encoded['id']), key=f'MP_champ_{i}'))
+    most_played_CP.append(st.number_input('Enter the mastery points for this champion: ', value=0, step=1000, format="%d", key=f'CP_{i}'))
+    
+if st.button('Recommend top 5 Champions based on your preferences', key="button2"):
+    predictionCP = SVD_recommend(summoner_name, most_played_champions, most_played_CP, recommend_df)
+    st.write(most_played_champions)
+    st.write(most_played_CP)
+    st.write(predictionCP)
+    most_played_champions = []
+    most_played_CP = []
+                                        
 
 #predict("Darius","Darius","Darius","Darius","Darius","Darius","Darius","Darius","Darius","yes","TOP",0.53)
 
