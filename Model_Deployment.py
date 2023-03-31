@@ -75,7 +75,7 @@ with open('winPct_minmax_scaler.pkl', 'rb') as f:
 # In[7]:
 
 
-champion_encoded = pd.read_csv('champion_encoded.csv')
+champion_encoded = pd.read_csv('champion_encoded1.csv')
 LOL_data_copy = pd.read_csv('LOL_data_copy.csv')
 df = pd.read_csv('df.csv')
 
@@ -83,7 +83,7 @@ df = pd.read_csv('df.csv')
 # In[8]:
 
 
-champion_df = pd.read_csv('champ_info.csv')
+champion_df = pd.read_csv('champion_df.csv')
 # create champion dictionary 
 champ_dict = dict((champ, index) for index, champ in enumerate(champion_df['id']))
 # Create a dictionary that maps champion names to their keys
@@ -189,7 +189,8 @@ def predict(champ1,champ2,champ3,champ4,champ5,champ6,champ7,champ8,champ9,hotst
         'MasterYi': 'Assassin',
         'XinZhao': 'Fighter, Assassin',
         'TahmKench': 'Tank, Support',
-        'AurelionSol': 'Mage'
+        'AurelionSol': 'Mage',
+        'Milio' : 'Support',
     }
 
     # Fill in the 'Roles' column based on the 'id' column
