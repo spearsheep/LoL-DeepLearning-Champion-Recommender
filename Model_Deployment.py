@@ -278,9 +278,15 @@ def SVD_recommend(summoner_name, most_played_champions, most_played_CP, recommen
 
 # In[10]:
 
-# streamlit display 
+# streamlit display
 st.title('LoL Champion Recommender Prototype')
 st.image(image, caption='Death is like the wind - always by my side', use_column_width=True)
+
+# App introduction
+st.markdown("""
+Explore our interactive dashboard, featuring deep learning and SVG algorithms, to experience content-based and collaborative recommendation systems for the perfect League of Legends champion pairing. By analyzing match-ups, player traits, and champion attributes, our model identifies champions with the highest win probability, tailored to your interests. Designed for scenarios with nine pre-selected champions, our app guides you in choosing the final, game-changing pick.
+""")
+
 summoner_name = st.text_input("Enter your Name: ", key="name")
 st.header('Enter the champions that your teammates have selected: ')
 
@@ -290,15 +296,13 @@ for i in range(1, 5):
     left_column, right_column = st.columns(2)
     with left_column:
         champion_selections[f'champion_{i}'] = st.selectbox('Select a champion:', np.unique(champion_encoded['id']), key=f'option_{i}')
-        
+
 st.header('Enter the champions that your opponents have selected: ')
 for i in range(5, 10):
     st.subheader(f"Please select champion {i}")
     left_column, right_column = st.columns(2)
     with left_column:
         champion_selections[f'champion_{i}'] = st.selectbox('Select a champion:', np.unique(champion_encoded['id']), key=f'option_{i}')
-        
-
 
 team_positions = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY']
 
@@ -313,22 +317,22 @@ win_pct = win_pct/100
 if st.button('Recommend top 10 Champions for your game', key="button1"):
     prediction = predict(*champion_selections.values(), selected_hotstreak, selected_team_position, win_pct)
     st.write(prediction)
-    
-    
-st.header('Enter your top five most played champions and mastery points') 
+
+st.header('Enter your top five most played champions and mastery points')
 
 most_played_champions = []
 most_played_CP = []
-for i in range(5): 
+for i in range(5):
     most_played_champions.append(st.selectbox('Select a champion:', np.unique(champion_encoded['id']), key=f'MP_champ_{i}'))
     most_played_CP.append(st.number_input('Enter the mastery points for this champion: ', value=0, step=1000, format="%d", key=f'CP_{i}'))
-    
+
 if st.button('Recommend top 5 Champions based on your preferences', key="button2"):
     predictionCP = SVD_recommend(summoner_name, most_played_champions, most_played_CP, recommend_df)
     for i in range(1,6):
         st.write(f'{i}: ' + predictionCP[i-1])
     most_played_champions = []
     most_played_CP = []
+
                                         
 
 #predict("Darius","Darius","Darius","Darius","Darius","Darius","Darius","Darius","Darius","yes","TOP",0.53)
