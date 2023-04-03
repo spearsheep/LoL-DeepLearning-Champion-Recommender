@@ -285,7 +285,9 @@ st.image(image, caption='Death is like the wind - always by my side', use_column
 
 # App introduction
 st.markdown("""
-Explore our interactive dashboard, featuring deep learning and SVG algorithms, to experience content-based and collaborative recommendation systems for the perfect League of Legends champion pairing. By analyzing match-ups, player traits, and champion attributes, our model identifies champions with the highest win probability, tailored to your interests. Designed for scenarios with nine pre-selected champions, our app guides you in choosing the final, game-changing pick. Here is the link to our GitHub: https://github.com/spearsheep/LoL-DeepLearning-Champion-Recommender
+Explore our interactive dashboard, featuring deep learning and SVG algorithms, to experience content-based and collaborative recommendation systems for the perfect League of Legends champion pairing. By analyzing match-ups, player traits, and champion attributes, our model identifies champions with the highest win probability, tailored to your interests. Designed for scenarios with nine pre-selected champions, our app guides you in choosing the final, game-changing pick. Here is the link to our GitHub and article: 
+https://github.com/spearsheep/LoL-DeepLearning-Champion-Recommender 
+https://www.bruinsportsanalytics.com/post/lol-recommender
 """)
 
 summoner_name = st.text_input("Enter your Name: ", key="name")
